@@ -9,9 +9,7 @@ import { RedisModule } from './redis/redis.module';
 
 import { OrderCreatedSubscriber } from './events/order-created.subscriber';
 import { AppService } from './app.service';
-import { OrderCreatedListener } from './events/order-created.listener';
-import { PaymentFailedListener } from './events/payment-failed.listener';
-import { PaymentSucceededListener } from './events/payment-succeeded.listener';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -19,6 +17,7 @@ import { PaymentSucceededListener } from './events/payment-succeeded.listener';
     PrismaModule,
     EventEmitterModule.forRoot(),
     RedisModule,
+    EventsModule,
     BullModule.forRoot({
       connection: {
         host: 'localhost',
@@ -27,12 +26,6 @@ import { PaymentSucceededListener } from './events/payment-succeeded.listener';
     }),
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    OrderCreatedListener,
-    OrderCreatedSubscriber,
-    PaymentFailedListener,
-    PaymentSucceededListener,
-  ],
+  providers: [AppService, OrderCreatedSubscriber],
 })
 export class AppModule {}
