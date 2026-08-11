@@ -8,11 +8,15 @@ import { PaymentService } from '../payments/payment.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
+import { PaymentFailedListener } from '../events/payment-failed.listener';
+import { PaymentSucceededListener } from '../events/payment-succeeded.listener';
+
 @Module({
   imports: [
     PrismaModule,
     EventsModule,
     OrdersModule,
+
     EventEmitterModule.forRoot(),
     BullModule.forRoot({
       connection: {
@@ -24,6 +28,11 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       name: 'orders',
     }),
   ],
-  providers: [OrdersProcessor, PaymentService],
+  providers: [
+    OrdersProcessor,
+    PaymentService,
+    PaymentFailedListener,
+    PaymentSucceededListener,
+  ],
 })
 export class WorkerModule {}
